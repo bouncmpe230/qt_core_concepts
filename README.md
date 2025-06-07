@@ -1,4 +1,4 @@
-# **Qt Core Conceptss**
+# **Qt Core Concepts**
 
 ## **1. What even is Qt?**
 
