@@ -2,9 +2,9 @@
 
 ## **1. What even is Qt?**
 
-When you search about Qt online, you will inevitably see the sentence: “*Qt is a cross-platform application development framework for creating graphical user interfaces as well as cross-platform applications that run on various software and hardware platforms such as Linux, Windows, macOS, Android or embedded systems with little or no change in the underlying codebase while still being a native application with native capabilities and speed.*” pop out in several places.
+When you search about Qt online, you will inevitably see the sentence: “*Qt is a cross-platform application development framework for creating graphical user interfaces as well as cross-platform applications that run on various software and hardware platforms such as Linux, Windows, macOS, Android or embedded systems with little or no change in the underlying codebase while still being a native application with native capabilities and speed.*” show up in several places.
 
-But what does that mean? And what is it about Qt that makes it the preferred GUI (Graphical User Interface) builder for over a million developers in over 70 industries?
+But what does that mean? And what is it about Qt that makes it the preferred GUI (Graphical User Interface) framework for over a million developers in over 70 industries?
 
 ```Qt is a cross-platform application development framework…``` — Qt is a framework -a collection of libraries and tools- that you can use to build a program, which you can then run on multiple operating systems.
 
@@ -16,7 +16,7 @@ But what does that mean? And what is it about Qt that makes it the preferred GUI
 
 Qt lets developers write code once to build high-performance, native-looking applications that run on many platforms—without needing to rewrite the code for each one. It handles much of the platform-specific complexity internally while giving you full access to native features when needed.
 
-Because Qt is written in C++ and exposes a C++ API, every fundamental you already know from the **C Core Concepts** (compilation, linking, pointers)  and the **C++ Core Concepts** (classes, constructors, inheritance, polymorphism, templates) transfers directly to Qt programming.
+Because Qt is written in C++ and exposes a C++ API, every fundamental you already know from the **C Core Concepts** (compilation, linking, pointers)  and the **C++ Core Concepts** (classes, constructors, inheritance, polymorphism, templates) transfer directly to Qt programming.
 
 You are now almost ready to learn how Qt can be used to create programs. But first, let’s see some terms and what they are.
 ---
@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
 
 ```QCoreApplication app(argc, argv);``` — Instantiates an application object.
 
-```QTimer::singleShot(500, &g, &Greeter::sayHello);``` — A timer that emits a single pulse after a timer to the specified slot. Normally, Qt uses ```connect()``` blocks to connect signals with slots; however, ```singleShot``` does this connection automatically, no need for a separate ```connect()``` call.
+```QTimer::singleShot(500, &g, &Greeter::sayHello);``` — A timer that emits a single pulse after some time, invoking the specified slot. Normally, Qt uses ```connect()``` blocks to connect signals with slots; however, ```singleShot``` does this connection automatically, no need for a separate ```connect()``` call.
 
 ```return app.exec();``` — Starts the event loop. The function waits here until ```quit()``` or ```exit()``` is called.
 
@@ -137,7 +137,7 @@ Those familiar with network or robotic applications should notice that the Qt’
 
 ## **5. Subclassing in Qt**
 
-**Subclassing** is the basic act of defining a “derived” class that inherits the data members and member functions of its “base” class. What does subclassing do for us in Qt?
+**Subclassing** is the basic act of defining a “derived” class that inherits the data members and member functions of its “base” class. Why is it important for us in Qt?
 
 In a sense, Qt is built around inheritance. If you follow the inheritance tree, you will see that almost everything ultimately derives from QObject, QWidget, or QQuickItem. This means that if you want to add a signal or a slot to an object, or handle events in a different way than is inherited, you can simply *subclass* to achieve the desired outcome.
 
