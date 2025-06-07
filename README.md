@@ -135,7 +135,7 @@ When the ```button``` object is clicked, a ```clicked()``` signal is emitted. Th
 Those familiar with network or robotic applications should notice that the Qt’s ```connect()``` call is conceptually similar to the Publish/Subscribe (pub/sub) model used in WebSockets and ROS. One can further explore this similarity by doing a search on **event-driven communication**.
 ---
 
-## **5. Typical project layout
+## **5. Typical project layout**
 
 ```
 MyApp/
