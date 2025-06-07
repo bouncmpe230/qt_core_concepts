@@ -4,7 +4,7 @@
 
 When you search about Qt online, you will inevitably see the sentence: “*Qt is a cross-platform application development framework for creating graphical user interfaces as well as cross-platform applications that run on various software and hardware platforms such as Linux, Windows, macOS, Android or embedded systems with little or no change in the underlying codebase while still being a native application with native capabilities and speed.*” pop out in several places.
 
-But what does that mean? And what is there about Qt that makes it the preferred GUI (Graphical User Interface) builder for over a million developers in over 70 industries?
+But what does that mean? And what is it about Qt that makes it the preferred GUI (Graphical User Interface) builder for over a million developers in over 70 industries?
 
 ```Qt is a cross-platform application development framework…``` — Qt is a framework -a collection of libraries and tools- that you can use to build a program, which you can then run on multiple operating systems.
 
