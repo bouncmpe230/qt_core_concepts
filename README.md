@@ -198,10 +198,16 @@ int main(int argc, char *argv[])
 ```
 
 **What just happened?**
-We **subclassed** `QLabel` to override `mousePressEvent`. This way, we were able to generate our own label object that behaves differently than the one defined in Qt's base libraries.
+We **subclassed** `QLabel` to override `mousePressEvent`. This way, we were able to create our own label object that extends the one defined in Qt's base libraries.
 
 Subclassing in Qt is a fundamental technique that allows developers to extend and customize the behavior of existing widgets beyond their default functionality. By creating subclasses of Qt's base classes like ```QLabel```, ```QPushButton```, or ```QWidget```, developers can override event handlers (such as mouse or keyboard events), define new properties, or introduce custom painting and logic.
 
 Without the flexibility offered by subclassing, developers would be stuck using the same widgets with the same looks and functionalities. One wouldn't be able to disable an unwanted function of a widget, for example.
 
 Thanks to subclassing, one can easily modify the offered elements to their needs with minimal work.
+
+# **What's Next?**
+
+Qt offers features beyond standard C++ that are not covered in this page. For example, one can wonder how can a framework built upon C++ manage to handle signals and slots despite the fact that they are not a part of C++. In order to understand how, you need to first understand Qt's Meta-Object Compiler.
+
+Meta-Object Compiler (simply ```moc```) is a code generator that processes header files and produces additional code that implements meta-object features of Qt. Qt's event system, signal/slot system, dynamic properties... exist all thanks to the ```moc```. Those interested can learn more about ```moc``` from the [official documentation page](https://doc.qt.io/qt-6/metaobjects.html). 
