@@ -39,88 +39,58 @@ You are now almost ready to learn how Qt can be used to create programs. But fir
 
 ## **3. Your First Qt Application**
 
-```cmake
-cmake_minimum_required(VERSION 3.18)
-project(QtHello LANGUAGES CXX)
 
-set(CMAKE_AUTOMOC ON)          # run moc automatically
-set(CMAKE_AUTORCC ON)          # (for resources, not used here)
-set(CMAKE_AUTOUIC ON)          # (for .ui files, not used here)
-
-find_package(Qt6 REQUIRED COMPONENTS Core)
-
-add_executable(QtHello
-    main.cpp
-)
-
-target_link_libraries(QtHello
-    Qt6::Core            # pulls in Qt6Core, pthread, etc.
-)
 ```
-```project(QtHello LANGUAGES CXX)```— Create a new project called QtHello and declare that it contains C++ (```CXX```) sources.
+# greeter.pro
+QT += widgets
 
-```find_package(Qt6 REQUIRED COMPONENTS Core)``` — Locates Qt 6 on the system.
+SOURCES += \
+    greeter.cpp
+```
 
-```add_executable(QtHello main.cpp)``` — Declares the target that will be built and the source file it uses.
+```QT += widgets``` — Need to include the Qt Widgets module in order to use GUI components like windows, labels, etc.
 
-```cpp
-// main.cpp
-#include <QCoreApplication>
-#include <QObject>
+```SOURCES += greeter.cpp``` — Specifies the source file(s).
+
+```
+// greeter.cpp
+#include <QApplication>
+#include <QLabel>
 #include <QTimer>
-#include <iostream>
 
-class Greeter : public QObject {
-    Q_OBJECT
-public:
-    Greeter(QObject* parent = nullptr) : QObject(parent) {}
-
-public slots:              // slot = callable function
-    void sayHello() {
-        std::cout << "Hello from Qt!" << std::endl;
-        QCoreApplication::quit();   // end event loop
-    }
-};
-
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-    QCoreApplication app(argc, argv);
+    QApplication app(argc, argv);
+    QLabel label("Hello Qt!");
 
-    Greeter g;
-    // QTimer emits the timeout() *signal* after 500 ms
-    QTimer::singleShot(500, &g, &Greeter::sayHello);
+    label.show();
 
-    return app.exec();  // start event loop
+    // Close the label (and app) after 5000 milliseconds (5 second)
+    QTimer::singleShot(5000, &app, &QApplication::quit);
+
+    return app.exec();
 }
+
 ```
 
-```class Greeter : public QObject {``` — Defines a C++ class called *Greeter* that inherits signal/slot capability from QObject.
+```int main(int argc, char *argv[])``` — The entry point of the application, should be familiar from C.
 
-```Greeter(QObject* parent = nullptr) : QObject(parent) {}``` — A trivial constructor that forwards the parent pointer to QObject. If a parent is supplied, Qt handles deletion automatically when that parent is destroyed.
+```QApplication app(argc, argv);``` — Creates a QApplication object named app. This initializes the Qt application environment and processes any command-line arguments (Which we don't have any in this simple project).
 
-```public slots:``` — Introduces the **slot** section. Slots are regular member functions that can be invoked directly or via the signal/slot mechanism.
+```QLabel label("Hello Qt!");``` — Creates a QLabel widget named "label". This QLabel object is responsible for the text you see on the window.
 
-```void sayHello() {``` — The slot in question.
+```label.show();``` — In order for an object to be visible (and interactible, in the case of buttons and the like) ```show()``` needs to be called on the object.
 
-```std::cout << "Hello from Qt!" << std::endl;``` — Prints a greeting, familiar C++ code.
+```QTimer::singleShot(5000, &app, &QApplication::quit);``` — A timer that emits a single pulse after some time, invoking the specified slot (hence quitting in this example). Normally, Qt uses ```connect()``` blocks to connect signals with slots; however, ```singleShot``` does this connection automatically, no need for a separate ```connect()``` call.
 
-```QCoreApplication::quit();``` — Call that posts a “quit” event to the application event loop, causing ```app.exec()``` to return.
-
-```int main(int argc, char* argv[])``` — Standard C++ entry point.
-
-```QCoreApplication app(argc, argv);``` — Instantiates an application object.
-
-```QTimer::singleShot(500, &g, &Greeter::sayHello);``` — A timer that emits a single pulse after some time, invoking the specified slot. Normally, Qt uses ```connect()``` blocks to connect signals with slots; however, ```singleShot``` does this connection automatically, no need for a separate ```connect()``` call.
-
-```return app.exec();``` — Starts the event loop. The function waits here until ```quit()``` or ```exit()``` is called.
+```return app.exec();``` — Starts the Qt event loop, which waits for and dispatches GUI events (like mouse clicks, timer events, etc.). The program will stay in this loop until app.quit() is called, after which it returns and the program ends.
 
 **Build & run**
 
-```bash
-mkdir build && cd build
-cmake .. -DCMAKE_PREFIX_PATH=/path/to/Qt/6.x/gcc_64/lib/cmake
-cmake --build .
-./QtHello
+```
+qmake greeter.pro
+make
+open greeter.app 
 ```
 ---
 
