@@ -40,7 +40,8 @@ You are now almost ready to learn how Qt can be used to create programs. But fir
 ## **3. Your First Qt Application**
 
 
-```greeter.pro
+```pro
+# greeter.pro
 QT += widgets
 
 SOURCES += \
@@ -51,7 +52,8 @@ SOURCES += \
 
 ```SOURCES += greeter.cpp``` — Specifies the source file(s).
 
-```greeter.cpp
+```cpp
+// greeter.cpp
 #include <QApplication>
 #include <QLabel>
 #include <QTimer>
@@ -85,7 +87,7 @@ int main(int argc, char *argv[])
 
 **Build & run**
 
-```terminal
+```bash
 qmake greeter.pro
 make
 open greeter.app 
