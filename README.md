@@ -114,112 +114,94 @@ Those familiar with network or robotic applications should notice that the Qt’
 
 ## **5. Subclassing in Qt**
 
-**Subclassing** is the basic act of defining a “derived” class that inherits the data members and member functions of its “base” class. Why is it important for us in Qt?
+**Subclassing** is the basic act of defining a “derived” class that inherits the data members and member functions of its “base” class. But why is it important for us in Qt?
 
 In a sense, Qt is built around inheritance. If you follow the inheritance tree, you will see that almost everything ultimately derives from QObject, QWidget, or QQuickItem. This means that if you want to add a signal or a slot to an object, or handle events in a different way than is inherited, you can simply *subclass* to achieve the desired outcome.
 
 ## **6. Subclassing example**
 
-**Goal:** Make something that toggles between red and green when clicked.
+**Goal:** Make a label change its text when clicked.
 
-##### Header `ledwidget.h`
+##### Project `customlabel.pro`
+```pro
+QT += widgets
 
-```cpp
-#pragma once
-#include <QWidget>
+SOURCES += \
+    main.cpp \
+    mylabel.cpp
 
-class LedWidget : public QWidget
-{
-    Q_OBJECT
-    Q_PROPERTY(bool on READ isOn WRITE setOn NOTIFY toggled)
-
-public:
-    explicit LedWidget(QWidget* parent = nullptr);
-
-    bool isOn() const { return m_on; }
-    void setOn(bool v);
-
-signals:
-    void toggled(bool on);           // emitted after every click
-
-protected:                            // override 3 event handlers
-    void paintEvent(QPaintEvent*) override;
-    void mouseReleaseEvent(QMouseEvent*) override;
-    QSize sizeHint() const override { return {24, 24}; }
-
-private:
-    bool m_on{false};
-};
+HEADERS += \
+    mylabel.h
 ```
 
-##### Source `ledwidget.cpp`
+##### Header `mylabel.h`
 
 ```cpp
-#include "ledwidget.h"
-#include <QPainter>
+#ifndef MYLABEL_H
+#define MYLABEL_H
+
+#include <QLabel>
 #include <QMouseEvent>
 
-LedWidget::LedWidget(QWidget* parent) : QWidget(parent)
+class MyLabel : public QLabel
 {
-    setCursor(Qt::PointingHandCursor);   // hand cursor on hover
+    Q_OBJECT
+
+public:
+    explicit MyLabel(const QString &text, QWidget *parent = nullptr);
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+};
+
+#endif // MYLABEL_H
+
+```
+
+##### Source `mylabel.cpp`
+
+```cpp
+#include "mylabel.h"
+
+MyLabel::MyLabel(const QString &text, QWidget *parent)
+    : QLabel(text, parent)
+{
+    setAlignment(Qt::AlignCenter);
+    setStyleSheet("font-size: 20px;");
 }
 
-void LedWidget::setOn(bool v)
+void MyLabel::mousePressEvent(QMouseEvent *event)
 {
-    if (m_on == v) return;
-    m_on = v;
-    update();            // schedule repaint
-    emit toggled(m_on);  // inherited from QObject
+    setText("Label clicked!");
+    QLabel::mousePressEvent(event); // call base class if needed
 }
 
-void LedWidget::paintEvent(QPaintEvent*)
-{
-    QPainter p(this);
-    p.setRenderHint(QPainter::Antialiasing);
-
-    QColor color = m_on ? Qt::green : Qt::red;
-    p.setBrush(color);
-    p.setPen(Qt::NoPen);
-    p.drawEllipse(rect().adjusted(1,1,-1,-1));
-}
-
-void LedWidget::mouseReleaseEvent(QMouseEvent* ev)
-{
-    if (ev->button() == Qt::LeftButton)
-        setOn(!m_on);     // toggle state
-}
 ```
 
 ##### Usage in `main.cpp`
 
 ```cpp
 #include <QApplication>
-#include <QHBoxLayout>
-#include <QLabel>
-#include "ledwidget.h"
+#include "mylabel.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    QWidget window;
-    auto* led  = new LedWidget;
-    auto* text = new QLabel("OFF");
-    QObject::connect(led, &LedWidget::toggled, [&](bool on){
-        text->setText(on ? "ON" : "OFF");
-    });
-
-    QHBoxLayout layout(&window);
-    layout.addWidget(led);
-    layout.addWidget(text);
-    window.show();
+    MyLabel label("Click me!");
+    label.resize(200, 100);
+    label.show();
 
     return app.exec();
 }
+
 ```
 
 **What just happened?**
+We **subclassed** `QLabel` to override `mousePressEvent`. This way, we were able to generate our own label object that behaves differently than the one defined in Qt's base libraries.
 
-* We **subclassed** `QWidget` to override `paintEvent`, `mouseReleaseEvent`, and `sizeHint`.
-* We added a private member (`m_on`), a public API (`isOn`, `setOn`), and a Qt *signal* (`toggled`).
-* Because `LedWidget` contains `Q_OBJECT`, the Meta-Object Compiler generates extra code so the signal/slot mechanism works seamlessly.
+Subclassing in Qt is a fundamental technique that allows developers to extend and customize the behavior of existing widgets beyond their default functionality. By creating subclasses of Qt's base classes like ```QLabel```, ```QPushButton```, or ```QWidget```, developers can override event handlers (such as mouse or keyboard events), define new properties, or introduce custom painting and logic.
+
+Without the flexibility offered by subclassing, developers would be stuck using the same widgets with the same looks and functionalities. One wouldn't be able to disable an unwanted function of a widget, for example.
+
+Thanks to subclassing, one can easily modify the offered elements to their needs with minimal work.
